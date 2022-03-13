@@ -4,5 +4,5 @@
 # Dependency directories
 node_modules/
 
-# File uploads
-uploads/*
+# Do not commit the distribution folder compiled by Webpack
+dist
