@@ -2,6 +2,10 @@ import { Sequelize } from 'sequelize';
 import url from 'url';
 import allConfig from '../config/config.js';
 
+import gameModel from './game.mjs';
+import userModel from './user.mjs';
+import wordleModel from './wordle.mjs';
+
 const env = process.env.NODE_ENV || 'development';
 const config = allConfig[env];
 const db = {};
@@ -27,6 +31,10 @@ if (env === 'production') {
 else {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
+
+db.Game = gameModel(sequelize, Sequelize.DataTypes);
+db.User = userModel(sequelize, Sequelize.DataTypes);
+db.Wordle = wordleModel(sequelize, Sequelize.DataTypes);
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
