@@ -5,6 +5,7 @@ import allConfig from '../config/config.js';
 import gameModel from './game.mjs';
 import userModel from './user.mjs';
 import wordleModel from './wordle.mjs';
+import allWordsModel from './allword.mjs';
 
 const env = process.env.NODE_ENV || 'development';
 const config = allConfig[env];
@@ -35,6 +36,13 @@ else {
 db.Game = gameModel(sequelize, Sequelize.DataTypes);
 db.User = userModel(sequelize, Sequelize.DataTypes);
 db.Wordle = wordleModel(sequelize, Sequelize.DataTypes);
+db.AllWord = allWordsModel(sequelize, Sequelize.DataTypes);
+
+db.Wordle.hasMany(db.User);
+db.User.belongsTo(db.Wordle);
+
+db.Game.hasMany(db.User);
+db.User.belongsTo(db.Game);
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

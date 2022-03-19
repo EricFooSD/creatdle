@@ -3,9 +3,11 @@
 /* eslint-disable no-underscore-dangle */
 import './styles.scss';
 
-//
-//           DOM Functions
-// .....................................
+/*
+ * ========================================================
+ *                  DOM FUNCTIONS
+ * ========================================================
+ */
 
 const createRowInBoard = (number, parent) => {
   const newRow = document.createElement('div');
@@ -15,15 +17,26 @@ const createRowInBoard = (number, parent) => {
 
   for (let i = 1; i <= 5; i += 1) {
     const letterTile = document.createElement('div');
-    letterTile.classList.add('col-1');
+    letterTile.classList.add('col-2');
 
     const input = document.createElement('input');
     input.setAttribute('id', `row${number}letter${i}`);
     input.setAttribute('type', 'text');
+    input.setAttribute('class', 'form-control');
     letterTile.appendChild(input);
 
     newRow.appendChild(letterTile);
   }
+
+  // button
+  const buttonContainer = document.createElement('div');
+  buttonContainer.classList.add('col-2');
+  const submitBtn = document.createElement('button');
+  submitBtn.setAttribute('id', `submit${number}`);
+  submitBtn.innerText = 'Submit';
+  buttonContainer.appendChild(submitBtn);
+  newRow.appendChild(buttonContainer);
+
   return newRow;
 };
 
@@ -41,8 +54,6 @@ const createWordBoard = () => {
   createRowInBoard(5, gameBoard);
   createRowInBoard(6, gameBoard);
 };
-
-createWordBoard();
 
 const Keyboard = {
   elements: {
@@ -216,5 +227,16 @@ const Keyboard = {
   },
 };
 
+/*
+ * ========================================================
+ *                  GAME FUNCTIONS
+ * ========================================================
+ */
+
+const startGame = () => {
+  createWordBoard();
+};
+
+startGame();
 Keyboard.init();
 Keyboard.open();

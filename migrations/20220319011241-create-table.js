@@ -97,11 +97,25 @@ module.exports = {
         type: Sequelize.DATE,
       },
     });
+
+    await queryInterface.createTable('allwords', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+      },
+      word: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+    });
   },
 
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('games_users');
     await queryInterface.dropTable('games');
     await queryInterface.dropTable('users');
+    await queryInterface.dropTable('allwords');
   },
 };
