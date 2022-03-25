@@ -1,28 +1,15 @@
 body {
   background-color: rgb(184, 209, 250);
 }
-.card {
-  margin: 10px;
-  padding: 10px;
-  background-color: rgb(223, 222, 222);
-  width: 50px;
-  text-align: center;
-  border-radius: 8px;
-  display: inline-block;
+
+.in-position {
+  border-color: rgb(117, 255, 71);
 }
 
-.suit {
-  margin: 5px;
-  font-size: 20px;
+.not-in-word {
+  border-color: rgb(128, 128, 128);
 }
 
-.name {
-  margin: 5px;
-  font-size: 24px;
-  font-weight: bold;
-  font-family: sans-serif;
-}
-
-.red {
-  color: rgb(208, 9, 9);
+.in-word {
+  border-color: rgb(232, 197, 110);
 }

@@ -2,6 +2,21 @@ body {
   background-color: rgb(249, 253, 255);
 }
 
+.in-position {
+  border-color: rgb(117, 255, 71);
+  border-width: 5px;
+}
+
+.not-in-word {
+  border-color: rgb(128, 128, 128);
+  border-width: 5px;
+}
+
+.in-word {
+  border-color: rgb(232, 197, 110);
+  border-width: 5px;
+}
+
 //               KEYBOARD
 // .....................................
 
