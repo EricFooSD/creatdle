@@ -13,12 +13,6 @@ export default function bindRoutes(app) {
   app.get('/home', (request, response) => {
     response.sendFile(resolve('dist', 'main.html'));
   });
-  // create a new game
-  app.post('/games', GamesController.create);
-  // update a game with new cards
-  app.put('/games/:id/deal', GamesController.deal);
-  // check logged in status
-  app.get('/loginStatus', UsersController.checkLogin);
-  // user log in
-  app.post('/login', UsersController.login);
+  // check word
+  app.post('/checkWord', GamesController.checkWord);
 }

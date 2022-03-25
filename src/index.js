@@ -2,6 +2,13 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-underscore-dangle */
 import './styles.scss';
+/*
+ * ========================================================
+ *                  HELPER FUNCTIONS
+ * ========================================================
+ */
+
+const getElement = (id) => document.getElementById(`${id}`);
 
 /*
  * ========================================================
@@ -15,7 +22,7 @@ const createRowInBoard = (number, parent) => {
   newRow.setAttribute('id', `row${number}`);
   parent.appendChild(newRow);
 
-  for (let i = 1; i <= 5; i += 1) {
+  for (let i = 0; i < 5; i += 1) {
     const letterTile = document.createElement('div');
     letterTile.classList.add('col-2');
 
@@ -34,6 +41,29 @@ const createRowInBoard = (number, parent) => {
   const submitBtn = document.createElement('button');
   submitBtn.setAttribute('id', `submit${number}`);
   submitBtn.innerText = 'Submit';
+
+  submitBtn.addEventListener('click', () => {
+    const guessedWord = `${getElement(`row${number}letter0`).value}`
+    + `${getElement(`row${number}letter1`).value}`
+    + `${getElement(`row${number}letter2`).value}`
+    + `${getElement(`row${number}letter3`).value}`
+    + `${getElement(`row${number}letter4`).value}`;
+
+    console.log('guessedWord', guessedWord);
+
+    axios.post('/checkWord', {
+      guess: guessedWord,
+    })
+      .then((response) => {
+        console.log(response.data);
+        const check = response.data;
+        for (let i = 0; i < 5; i += 1) {
+          getElement(`row${number}letter${i}`).classList.add(`${check.color[i]}`);
+        }
+      })
+      .catch((error) => { console.log(error); });
+  });
+
   buttonContainer.appendChild(submitBtn);
   newRow.appendChild(buttonContainer);
 
