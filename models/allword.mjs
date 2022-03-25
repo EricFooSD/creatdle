@@ -1,4 +1,4 @@
-export default function allWordsModel(sequelize, DataTypes) {
+export default function allWordModel(sequelize, DataTypes) {
   return sequelize.define('allword', {
     id: {
       allowNull: false,
@@ -9,7 +9,14 @@ export default function allWordsModel(sequelize, DataTypes) {
     word: {
       allowNull: false,
       type: DataTypes.STRING,
-
+    },
+    createdAt: {
+      allowNull: false,
+      type: DataTypes.DATE,
+    },
+    updatedAt: {
+      allowNull: false,
+      type: DataTypes.DATE,
     },
   }, { underscored: true });
 }

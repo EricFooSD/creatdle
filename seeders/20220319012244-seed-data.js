@@ -20,7 +20,14 @@ module.exports = {
       {
         name: 'Eric`s testing wordle',
         description: 'testing',
-        words: JSON.stringify({ words: ['sweet', 'great', 'adore'] }),
+        words: JSON.stringify({
+          words: ['sweet', 'great'],
+          tally: [{
+            s: 1, w: 1, e: 2, t: 1,
+          }, {
+            g: 1, r: 1, e: 1, a: 1, t: 1,
+          }],
+        }),
         code: 'ABC123',
         creator_id: 1,
         created_at: new Date(),
@@ -28,6 +35,26 @@ module.exports = {
       },
     ];
     await queryInterface.bulkInsert('wordles', wordle);
+
+    const game = [
+      {
+        wordle_id: 1,
+        game_state: JSON.stringify({
+          words: ['sweet', 'great'],
+          tally: [{
+            s: 1, w: 1, e: 2, t: 1,
+          }, {
+            g: 1, r: 1, e: 1, a: 1, t: 1,
+          }],
+          currentWord: 0,
+          guesses: [],
+        }),
+        player_id: 2,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+    ];
+    await queryInterface.bulkInsert('games', game);
 
     const fiveLetterWords = [
       'aahed',
@@ -15955,20 +15982,22 @@ module.exports = {
       'zudda',
       'zulus',
       'zunis'];
-
     const allWords = [];
-
     fiveLetterWords.forEach((element) => {
-      const obj = { word: element };
+      const obj = {
+        word: element,
+        created_at: new Date(),
+        updated_at: new Date(),
+      };
       allWords.push(obj);
     });
-
     await queryInterface.bulkInsert('allwords', allWords);
   },
 
   async down(queryInterface, Sequelize) {
     await queryInterface.bulkDelete('users', null, {});
     await queryInterface.bulkDelete('wordles', null, {});
+    await queryInterface.bulkDelete('games', null, {});
     await queryInterface.bulkDelete('allwords', null, {});
   },
 };
