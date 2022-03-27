@@ -13,6 +13,10 @@ export default function bindRoutes(app) {
   app.get('/home', (request, response) => {
     response.sendFile(resolve('dist', 'main.html'));
   });
+
+  // check on current game state
+  app.post('/loadCurrentGame', GamesController.loadCurrentGameState);
+
   // check word
-  app.post('/checkWord', GamesController.checkWord);
+  app.post('/checkGame', GamesController.checkGame);
 }
