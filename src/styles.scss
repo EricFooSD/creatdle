@@ -1,20 +1,51 @@
 body {
-  background-color: rgb(249, 253, 255);
+  background-color: rgb(252, 252, 252);
+}
+
+.tile {
+  width: 50px;
+  height: 50px;
+  line-height: 50px; // must be same as height to center
+  border-color: rgb(0, 0, 0);
+  border-width: 1px;
+  border-style: solid;
+  text-align: center;
+  color: #000000;
+  font-weight: bold;
+  margin: 4px 2px 4px 2px;
 }
 
 .in-position {
-  border-color: rgb(117, 255, 71);
-  border-width: 5px;
+  background-color: #459472;
+  color: #ffffff;
+  animation-name: flip;
+  animation-duration: 2s;
 }
 
 .not-in-word {
-  border-color: rgb(128, 128, 128);
-  border-width: 5px;
+  background-color: rgb(122, 126, 122);
+  color: #ffffff;
+  animation-name: flip;
+  animation-duration: 2s;
 }
 
 .in-word {
-  border-color: rgb(232, 197, 110);
-  border-width: 5px;
+  background-color: #deaf53;
+  color: #ffffff;
+  animation-name: flip;
+  animation-duration: 2s;
+}
+
+//               ANIMATIONS
+// .....................................
+
+@keyframes flip {
+  from {
+    transform: rotateX(270deg);
+  }
+  to {
+    transform: rotateX(360deg);
+  }
 }
 
 //               KEYBOARD
@@ -26,7 +57,7 @@ body {
   bottom: 0;
   width: 100%;
   padding: 5px 0;
-  background: #004134;
+  background: #346751;
   box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
   user-select: none;
   transition: bottom 0.4s;
@@ -42,7 +73,7 @@ body {
 
 .keyboard__key {
   height: 45px;
-  width: 6%;
+  width: 8%;
   max-width: 90px;
   margin: 3px;
   border-radius: 4px;
