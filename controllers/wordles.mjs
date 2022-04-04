@@ -1,3 +1,21 @@
+/* eslint-disable no-await-in-loop */
+/*
+ * ========================================================
+ *                  HELPER Functions
+ * ========================================================
+ */
+
+// to generate a 6 digit unique code
+const generateCode = () => {
+  let text = '';
+  const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+  for (let i = 0; i < 6; i += 1) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return text;
+};
+
 /*
  * ========================================================
  *                  Controller Functions
@@ -5,89 +23,69 @@
  */
 
 export default function initWordlesController(db) {
-  // render the main page
-  const index = (request, response) => {
-    response.render('games/index');
-  };
-
-  // create a new game. Insert a new row in the DB.
-  const create = async (request, response) => {
-    // deal out a new shuffled deck for this game.
-    const cardDeck = shuffleCards(makeDeck());
-    const playerHand = {
-      playerOne: [cardDeck.pop()],
-      playerTwo: [cardDeck.pop()],
-    };
-    const winner = decideWinner(playerHand.playerOne[0].rank, playerHand.playerTwo[0].rank);
-    const currentScore = {
-      playerOne: 0,
-      playerTwo: 0,
-    };
-
-    const outcome = {
-      message: outcomeMsg(winner),
-      score: updateScore(currentScore, winner),
-    };
-
-    const newGame = {
-      gameState: {
-        cardDeck,
-        playerHand,
-        outcome,
-      },
-    };
-
+  // check is words are valid and create wordle
+  const checkWordsAndCreate = async (request, response) => {
     try {
-      // run the DB INSERT query
-      const game = await db.Game.create(newGame);
-
-      // send the new game back to the user.
-      // dont include the deck so the user can't cheat
-      response.send({
-        id: game.id,
-        playerHand: game.gameState.playerHand,
-        outcome: game.gameState.outcome,
-      });
-    } catch (error) {
-      response.status(500).send(error);
-    }
-  };
-
-  // deal new cards from the deck.
-  const deal = async (request, response) => {
-    try {
-      // get the game by the ID passed in the request
-      const game = await db.Game.findByPk(request.params.id);
-
-      // make changes to the object
-      const playerHand = {
-        playerOne: [game.gameState.cardDeck.pop()],
-        playerTwo: [game.gameState.cardDeck.pop()],
+      // make a array of the words that user wants to put into the wordle
+      const { createArray } = request.body;
+      const acceptedArray = [];
+      const rejectedArray = [];
+      let responseObj = {
+        accept: true,
       };
 
-      const winner = decideWinner(playerHand.playerOne[0].rank, playerHand.playerTwo[0].rank);
+      for (let i = 0; i < createArray.length; i += 1) {
+        // check if each word is in allWords DB
+        const isWord = await db.AllWord.findOne({ where: { word: `${createArray[i]}` } });
+        if (!isWord) {
+        // change response object
+          responseObj.accept = false;
+          rejectedArray.push(createArray[i]);
+        } else {
+          acceptedArray.push(createArray[i]);
+        }
+      }
+      responseObj.rejected = rejectedArray;
+      // if set of words can be accepted, create Wordle in DB
+      if (responseObj.accept) {
+        const tally = [];
+        acceptedArray.forEach((element) => {
+          const letterTally = {};
+          const letters = element.split('');
+          for (let i = 0; i < letters.length; i += 1) {
+            const letter = letters[i];
+            if (letter in letterTally) {
+              letterTally[letter] += 1;
+            }
+            else {
+              letterTally[letter] = 1;
+            }
+          }
+          tally.push(letterTally);
+        });
 
-      const outcome = {
-        message: outcomeMsg(winner),
-        score: updateScore(game.gameState.outcome.score, winner),
-      };
-      // update the game with the new info
-      await game.update({
-        gameState: {
-          cardDeck: game.gameState.cardDeck,
-          playerHand,
-          outcome,
-        },
+        const { creator } = request.body;
 
-      });
+        const newWordle = {
+          name: request.body.wordleName,
+          description: request.body.wordleDesc,
+          words: {
+            words: acceptedArray,
+            tally,
+          },
+          code: generateCode(),
+          creatorId: creator,
+        };
+        // create Wordle in DB
+        const wordle = await db.Wordle.create(newWordle);
 
-      // send the updated game back to the user.
-      // dont include the deck so the user can't cheat
-      response.send({
-        id: game.id,
-        playerHand: game.gameState.playerHand,
-        outcome: game.gameState.outcome,
-      });
+        responseObj = {
+          accept: true,
+          wordleID: wordle.id,
+          code: wordle.code,
+        };
+      }
+      response.send(responseObj);
     } catch (error) {
       response.status(500).send(error);
     }
@@ -96,8 +94,6 @@ export default function initWordlesController(db) {
   // return all functions we define in an object
   // refer to the routes file above to see this used
   return {
-    deal,
-    create,
-    index,
+    checkWordsAndCreate,
   };
 }

@@ -38,12 +38,6 @@ db.User = userModel(sequelize, Sequelize.DataTypes);
 db.Wordle = wordleModel(sequelize, Sequelize.DataTypes);
 db.AllWord = allWordModel(sequelize, Sequelize.DataTypes);
 
-db.Wordle.hasMany(db.User);
-db.User.belongsTo(db.Wordle);
-
-db.Game.hasMany(db.User);
-db.User.belongsTo(db.Game);
-
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

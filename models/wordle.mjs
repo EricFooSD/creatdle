@@ -22,11 +22,8 @@ export default function wordleModel(sequelize, DataTypes) {
       type: DataTypes.STRING,
     },
     creatorId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'users',
-        key: 'id',
-      },
+      allowNull: false,
+      type: DataTypes.STRING,
     },
     createdAt: {
       allowNull: false,
