@@ -6,6 +6,8 @@ import jsSHA from 'jssha';
  * ========================================================
  */
 
+const getRandomNum = () => (Math.random() * 1000);
+
 const SALT = 'Login Key';
 
 const getHash = (input) => {
@@ -29,6 +31,7 @@ const getHash = (input) => {
 
 export default function initUsersController(db) {
   // check is user is loggedin
+  // **** NOT USED *******
   const checkLogin = async (request, response) => {
     console.log('request.cookies', request.cookies);
     let output = {
@@ -57,7 +60,8 @@ export default function initUsersController(db) {
     }
     response.send(output);
   };
-
+  // login
+  // **** NOT USED *******
   const login = async (request, response) => {
     console.log('login attempted');
     try {
@@ -67,7 +71,6 @@ export default function initUsersController(db) {
           name: request.body.name,
         },
       });
-      console.log('user', user);
       if (user != null) {
         const shaObj = new jsSHA('SHA-512', 'TEXT', { encoding: 'UTF8' });
         shaObj.update(request.body.password);
@@ -87,8 +90,24 @@ export default function initUsersController(db) {
     }
   };
 
+  // check
+  const createGuestID = async (request, response) => {
+    const guestID = getHash(getRandomNum());
+    try {
+      const user = await db.Game.findOne({ where: { playerId: guestID } });
+      if (!user) {
+        console.log(guestID);
+        response.send({ guestID });
+      }
+    }
+    catch (error) {
+      response.status(500).send(error);
+    }
+  };
+
   return {
     checkLogin,
     login,
+    createGuestID,
   };
 }
