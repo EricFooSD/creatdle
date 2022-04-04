@@ -17,11 +17,7 @@ export default function gameModel(sequelize, DataTypes) {
       type: DataTypes.JSON,
     },
     playerId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'users',
-        key: 'id',
-      },
+      type: DataTypes.STRING,
     },
     createdAt: {
       allowNull: false,
