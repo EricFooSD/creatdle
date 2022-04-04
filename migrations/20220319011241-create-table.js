@@ -48,11 +48,8 @@ module.exports = {
         type: Sequelize.STRING,
       },
       creator_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'users',
-          key: 'id',
-        },
+        allowNull: false,
+        type: Sequelize.STRING,
       },
       created_at: {
         allowNull: false,
@@ -82,11 +79,7 @@ module.exports = {
         type: Sequelize.JSON,
       },
       player_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'users',
-          key: 'id',
-        },
+        type: Sequelize.STRING,
       },
       created_at: {
         allowNull: false,

@@ -18,18 +18,20 @@ module.exports = {
 
     const wordle = [
       {
-        name: 'Eric`s testing wordle',
-        description: 'testing',
+        name: 'Welcome to Creatdle',
+        description: 'This is a testing Wordle',
         words: JSON.stringify({
-          words: ['sweet', 'great'],
+          words: ['sweet', 'great', 'hello'],
           tally: [{
             s: 1, w: 1, e: 2, t: 1,
           }, {
             g: 1, r: 1, e: 1, a: 1, t: 1,
+          }, {
+            h: 1, l: 2, e: 1, o: 1,
           }],
         }),
         code: 'ABC123',
-        creator_id: 1,
+        creator_id: '6ab2859e0525281b22803b2c8ee9ac8723cc6c5af4156',
         created_at: new Date(),
         updated_at: new Date(),
       },
@@ -40,16 +42,19 @@ module.exports = {
       {
         wordle_id: 1,
         game_state: JSON.stringify({
-          words: ['sweet', 'great'],
+          words: ['sweet', 'great', 'hello'],
           tally: [{
             s: 1, w: 1, e: 2, t: 1,
           }, {
             g: 1, r: 1, e: 1, a: 1, t: 1,
+          }, {
+            h: 1, l: 2, e: 1, o: 1,
           }],
           currentWord: 0,
           guesses: [],
+          color: [],
         }),
-        player_id: 2,
+        player_id: '6ab2859e0525281b22803b2c8ee9ac8723cc6c5af4156',
         created_at: new Date(),
         updated_at: new Date(),
       },
