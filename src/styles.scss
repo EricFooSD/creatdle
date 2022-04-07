@@ -1,18 +1,26 @@
 body {
-  background-color: rgb(252, 252, 252);
+  background-color: rgb(232, 241, 250);
 }
 
 .tile {
-  width: 50px;
-  height: 50px;
-  line-height: 50px; // must be same as height to center
-  border-color: rgb(0, 0, 0);
-  border-width: 1px;
+  width: 40px;
+  height: 40px;
+  line-height: 40px; // must be same as height to center
+  border-color: rgb(82, 81, 81);
+  border-width: 2px;
   border-style: solid;
   text-align: center;
   color: #000000;
   font-weight: bold;
   margin: 4px 2px 4px 2px;
+}
+
+@media (min-width: 800px) {
+  .tile {
+    width: 50px;
+    height: 50px;
+    line-height: 50px; // must be same as height to center
+  }
 }
 
 .in-position {
@@ -36,6 +44,56 @@ body {
   animation-duration: 2s;
 }
 
+h1 {
+  font-size: 20px;
+  margin: 0;
+}
+
+@media (min-width: 800px) {
+  h1 {
+    font-size: 35px;
+  }
+}
+
+header {
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #f4f4f4;
+}
+
+#home-container {
+  height: 80vh;
+}
+
+#code-container {
+  margin-top: 100px;
+}
+
+#create-container {
+  margin-top: 50px;
+}
+
+#button-container {
+  margin: 20px;
+}
+
+.word-input {
+  margin: 3px;
+}
+
+#game-board-name {
+  font-size: 27px;
+  font-family: "Nanum Brush Script", cursive;
+  text-align: center;
+  animation: fading 3s infinite alternate;
+}
+
+@media (min-width: 800px) {
+  #game-board-name {
+    font-size: 35px;
+  }
+}
+
 //               ANIMATIONS
 // .....................................
 
@@ -45,6 +103,15 @@ body {
   }
   to {
     transform: rotateX(360deg);
+  }
+}
+
+@keyframes fading {
+  from {
+    color: #459472;
+  }
+  to {
+    color: #456594;
   }
 }
 

@@ -15,8 +15,20 @@ export default function bindRoutes(app) {
   });
 
   // check on current game state
-  app.post('/loadCurrentGame', GamesController.loadCurrentGameState);
+  app.post('/checkCurrentGame', GamesController.checkCurrentGameState);
+
+  // check user's guess
+  app.post('/checkGuess', GamesController.checkGuess);
 
   // check word
-  app.post('/checkGame', GamesController.checkGame);
+  app.post('/checkCodeAndCreate', GamesController.checkCodeAndCreate);
+
+  // generate Guest cookie
+  app.post('/createGuestID', UsersController.createGuestID);
+
+  // generate check word submission
+  app.post('/checkWordsAndCreate', WordlesController.checkWordsAndCreate);
+
+  // move game to next word
+  app.post('/goToNextWord', GamesController.goToNextWord);
 }
