@@ -462,7 +462,7 @@ const submitWordle = () => {
   const createArray = [];
   // get the words from the 5 rows
   for (let i = 0; i < 5; i += 1) {
-    const word = getElement(`word-input-${i}`).value;
+    const word = getElement(`word-input-${i}`).value.toLowerCase();
     if (word) {
       createArray.push(word);
     }
@@ -477,6 +477,7 @@ const submitWordle = () => {
         createArray, wordleName, wordleDesc, creator,
       })
       .then((response) => {
+        const check = response.data;
         if (!check.accept) {
           let words = '';
           check.rejected.forEach((element) => {
