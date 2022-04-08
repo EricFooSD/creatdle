@@ -50,7 +50,6 @@ const checkUserCookie = () => {
     axios
       .post('/createGuestID')
       .then((response) => {
-        console.log(response.data);
         setCookie('user', `${response.data.guestID}`);
       })
       .catch((error) => { console.log(error); });
@@ -248,7 +247,6 @@ const checkGuess = () => {
     axios
       .post('/checkGuess', { guess, gameId })
       .then((response) => {
-        console.log(response.data);
         const check = response.data;
         // if submission is a word
         if (check.isWord) {
@@ -376,7 +374,6 @@ const loadStartGamePage = () => {
   axios
     .post('/checkCurrentGame', { gameId })
     .then((response) => {
-      console.log(response.data);
       const current = response.data;
       getElement('game-board-name').innerHTML = `${current.name}: ${current.desc}`;
       // update the current state of the game, ie how many guesses, what where the guesses and color
@@ -480,8 +477,6 @@ const submitWordle = () => {
         createArray, wordleName, wordleDesc, creator,
       })
       .then((response) => {
-        const check = response.data;
-        console.log('check', check);
         if (!check.accept) {
           let words = '';
           check.rejected.forEach((element) => {
