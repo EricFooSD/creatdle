@@ -91,8 +91,6 @@ export default function initWordlesController(db) {
     }
   };
 
-  // return all functions we define in an object
-  // refer to the routes file above to see this used
   return {
     checkWordsAndCreate,
   };

@@ -96,12 +96,11 @@ export default function initGamesController(db) {
             guessNum: guessArray.length,
             split: guessSplit,
           };
-        }
-        // determine whether letters are 'in-word', 'in-position', 'not-in-word'
+        } else {
+          // determine whether letters are 'in-word', 'in-position', 'not-in-word'
 
-        // find all the letters that are 'in-position' first and remove from tally
-        // we should always consider the in-position words first
-        else {
+          // find all the letters that are 'in-position' first and remove from tally
+          // we should always consider the in-position words first
           for (let j = 0; j < guessSplit.length; j += 1) {
             if (guessSplit[j] === wordSplit[j]) {
               tally[guessSplit[j]] -= 1;
