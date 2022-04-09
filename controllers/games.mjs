@@ -228,10 +228,42 @@ export default function initGamesController(db) {
     }
   };
 
+  // check guess against word
+  const resetGame = async (request, response) => {
+    try {
+      const { gameId } = request.body;
+      // query the word for this game
+      const game = await db.Game.findByPk(gameId);
+
+      // update game with new info
+      await game.update({
+        gameState: {
+          words: game.gameState.words,
+          tally: game.gameState.tally,
+          currentWord: game.gameState.currentWord,
+          guesses: [],
+          color: [],
+        },
+      });
+
+      const wordle = await db.Wordle.findByPk(game.wordleId);
+
+      response.send(
+        {
+          name: wordle.name,
+          desc: wordle.description,
+          game,
+        },
+      );
+    } catch (error) {
+      response.status(500).send(error);
+    }
+  };
   return {
     checkGuess,
     checkCurrentGameState,
     checkCodeAndCreate,
     goToNextWord,
+    resetGame,
   };
 }

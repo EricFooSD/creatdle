@@ -221,6 +221,22 @@ const goToNextWord = () => {
     .catch((error) => { console.log(error); });
 };
 
+const resetGame = () => {
+  const gameId = sessionStorage.getItem('gameId');
+
+  axios
+    .post('/resetGame', { gameId })
+    .then((response) => {
+      const current = response.data;
+      updateGuessToSession([]);
+      sessionStorage.setItem('guessNumber', 0);
+      getElement('game-board-container').remove();
+      createWordBoard();
+      getElement('game-board-name').innerHTML = `${current.name}: ${current.desc}`;
+    })
+    .catch((error) => { console.log(error); });
+};
+
 // keyboard function for backspace
 const clickBackspace = () => {
   const backspaceArray = getGuessFromSession();
@@ -257,16 +273,21 @@ const checkGuess = () => {
           }
           sessionStorage.setItem('guessNumber', `${check.guessNum + 1}`);
           updateGuessToSession([]);
+          if (check.won) {
+            // if user has correctly guessed the word, throw button to move to next word
+            const btnCtn = getElement('button-container');
+            // button
+            createBtn('next', 'Next Word', btnCtn, goToNextWord);
+          } else if (sessionStorage.getItem('guessNumber') >= 6) {
+            // if user's guess is wrong and it is the 6th guess, show try again button
+            const btnCtn = getElement('button-container');
+            // button
+            createBtn('tryAgain', 'Try Again', btnCtn, resetGame);
+          }
         } else {
           // if submision is not a word, throw validation alert
           rejectSound.play();
           createAlert('This is not a word', 'alert-primary', 2000);
-        }
-        if (check.won) {
-          // if user has correctly guessed the word, throw button to move to next word
-          const btnCtn = getElement('button-container');
-          // button
-          createBtn('next', 'Next Word', btnCtn, goToNextWord);
         }
       })
       .catch((error) => { console.log(error); });

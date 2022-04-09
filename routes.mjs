@@ -31,4 +31,7 @@ export default function bindRoutes(app) {
 
   // move game to next word
   app.post('/goToNextWord', GamesController.goToNextWord);
+
+  // allow user to try wordle again
+  app.post('/resetGame', GamesController.resetGame);
 }
