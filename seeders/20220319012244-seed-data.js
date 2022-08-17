@@ -1,21 +1,5 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
-    const user = [
-      {
-        name: 'Eric',
-        password: 'testing',
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-      {
-        name: 'Harry',
-        password: 'testing',
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-    ];
-    await queryInterface.bulkInsert('users', user);
-
     const wordle = [
       {
         name: 'Welcome to Creatdle',
@@ -16000,7 +15984,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('users', null, {});
     await queryInterface.bulkDelete('wordles', null, {});
     await queryInterface.bulkDelete('games', null, {});
     await queryInterface.bulkDelete('allwords', null, {});
