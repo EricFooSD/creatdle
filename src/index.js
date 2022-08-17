@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable max-len */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-underscore-dangle */
@@ -10,17 +11,18 @@ import './styles.scss';
  */
 
 // get the current guess letters from session
-const getGuessFromSession = () => JSON.parse(sessionStorage.getItem('currentGuess'));
+const getGuessFromSession = () => JSON.parse(localStorage.getItem('currentGuess'));
 
 // update the current guess letters to session
 const updateGuessToSession = (array) => {
-  sessionStorage.setItem('currentGuess', JSON.stringify(array));
+  localStorage.setItem('currentGuess', JSON.stringify(array));
 };
 
 const rejectSound = new Audio('/sounds/reject.wav');
 
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // Helper functions for Cookies
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 const setCookie = (cname, cvalue) => {
   document.cookie = `${cname}=${cvalue};`;
@@ -84,7 +86,7 @@ const createRowInBoard = (number, parent) => {
 
 // update letters in the row as user selects the alphabets
 const updateRow = (array) => {
-  const guessNumber = sessionStorage.getItem('guessNumber');
+  const guessNumber = localStorage.getItem('guessNumber');
   for (let i = 0; i < 5; i += 1) {
     if (!array[i]) getElement(`R${guessNumber}L${i}`).innerHTML = '';
     else getElement(`R${guessNumber}L${i}`).innerHTML = `${array[i].toUpperCase()}`;
@@ -206,14 +208,14 @@ const createInputForWordle = (id, placeholder, parent) => {
 
 // after users have correctly guessed the word, allow them to move to next word in game
 const goToNextWord = () => {
-  const gameId = sessionStorage.getItem('gameId');
+  const gameId = localStorage.getItem('gameId');
 
   axios
     .post('/goToNextWord', { gameId })
     .then((response) => {
       const current = response.data;
       updateGuessToSession([]);
-      sessionStorage.setItem('guessNumber', 0);
+      localStorage.setItem('guessNumber', 0);
       getElement('game-board-container').remove();
       createWordBoard();
       getElement('game-board-name').innerHTML = `${current.name}: ${current.desc}`;
@@ -222,14 +224,14 @@ const goToNextWord = () => {
 };
 
 const resetGame = () => {
-  const gameId = sessionStorage.getItem('gameId');
+  const gameId = localStorage.getItem('gameId');
 
   axios
     .post('/resetGame', { gameId })
     .then((response) => {
       const current = response.data;
       updateGuessToSession([]);
-      sessionStorage.setItem('guessNumber', 0);
+      localStorage.setItem('guessNumber', 0);
       getElement('game-board-container').remove();
       createWordBoard();
       getElement('game-board-name').innerHTML = `${current.name}: ${current.desc}`;
@@ -251,7 +253,7 @@ const clickBackspace = () => {
 const checkGuess = () => {
   let guess = '';
   const submitArray = getGuessFromSession();
-  const gameId = sessionStorage.getItem('gameId');
+  const gameId = localStorage.getItem('gameId');
   // check if there are 5 letters before submitting, throw error
   if (submitArray.length < 5) {
     rejectSound.play();
@@ -271,14 +273,14 @@ const checkGuess = () => {
             letter.classList.add(`${check.color[i]}`);
             letter.innerHTML = `${(check.split[i]).toUpperCase()}`;
           }
-          sessionStorage.setItem('guessNumber', `${check.guessNum + 1}`);
+          localStorage.setItem('guessNumber', `${check.guessNum + 1}`);
           updateGuessToSession([]);
           if (check.won) {
             // if user has correctly guessed the word, throw button to move to next word
             const btnCtn = getElement('button-container');
             // button
             createBtn('next', 'Next Word', btnCtn, goToNextWord);
-          } else if (sessionStorage.getItem('guessNumber') >= 6) {
+          } else if (localStorage.getItem('guessNumber') >= 6) {
             // if user's guess is wrong and it is the 6th guess, show try again button
             const btnCtn = getElement('button-container');
             // button
@@ -390,7 +392,7 @@ const Keyboard = {
 // client load the game ie the matrix
 const loadStartGamePage = () => {
   getElement('code-container').remove();
-  const gameId = sessionStorage.getItem('gameId');
+  const gameId = localStorage.getItem('gameId');
   createWordBoard();
   axios
     .post('/checkCurrentGame', { gameId })
@@ -405,8 +407,8 @@ const loadStartGamePage = () => {
           letter.innerHTML = `${(current.guessSplit[i][j]).toUpperCase()}`;
         }
       }
-      sessionStorage.setItem('guessNumber', `${current.color.length}`);
-      sessionStorage.setItem('currentGuess', JSON.stringify([]));
+      localStorage.setItem('guessNumber', `${current.color.length}`);
+      localStorage.setItem('currentGuess', JSON.stringify([]));
     })
     .catch((error) => { console.log(error); });
 
@@ -432,7 +434,7 @@ const checkCode = () => {
         if (!check.availCode) {
           createAlert('Not a valid code, create a new wordle instead', 'alert-warning', 3000);
         } else {
-          sessionStorage.setItem('gameId', `${check.gameId}`);
+          localStorage.setItem('gameId', `${check.gameId}`);
           loadStartGamePage();
         }
       })

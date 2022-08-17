@@ -15923,6 +15923,7 @@ const allFiveLetterWords = [
   'zucco',
   'zudda',
   'zulus',
-  'zunis'];
+  'zunis',
+];
 
 export { allFiveLetterWords as default };
