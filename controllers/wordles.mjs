@@ -5,13 +5,16 @@
  * ========================================================
  */
 
-// to generate a 6 digit unique code
+/**
+ * @desc function to generate a random 6 digit unique
+ * @return string of 6
+ */
 const generateCode = () => {
   let text = '';
-  const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  const possibleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
   for (let i = 0; i < 6; i += 1) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
+    text += possibleChars.charAt(Math.floor(Math.random() * possibleChars.length));
   }
   return text;
 };
@@ -23,10 +26,13 @@ const generateCode = () => {
  */
 
 export default function initWordlesController(db) {
-  // check is words are valid and create wordle
+  /**
+ * @desc to check if words user has entered are valid and create Wordle in DB
+ * @param request information about the Wordle that user wants to create
+ */
   const checkWordsAndCreate = async (request, response) => {
     try {
-      // make a array of the words that user wants to put into the wordle
+      // make a array of the words that user wants in their wordle
       const { createArray } = request.body;
       const acceptedArray = [];
       const rejectedArray = [];
@@ -34,11 +40,11 @@ export default function initWordlesController(db) {
         accept: true,
       };
 
+      // loop to compare if each word is a legitimate word
+      // compare from master words list in AllWords DB
       for (let i = 0; i < createArray.length; i += 1) {
-        // check if each word is in allWords DB
         const isWord = await db.AllWord.findOne({ where: { word: `${createArray[i]}` } });
         if (!isWord) {
-        // change response object
           responseObj.accept = false;
           rejectedArray.push(createArray[i]);
         } else {
@@ -46,8 +52,9 @@ export default function initWordlesController(db) {
         }
       }
       responseObj.rejected = rejectedArray;
-      // if set of words can be accepted, create Wordle in DB
+      // if all words can be accepted, create Wordle in DB
       if (responseObj.accept) {
+        // create a tally of letters for each word
         const tally = [];
         acceptedArray.forEach((element) => {
           const letterTally = {};
@@ -66,6 +73,7 @@ export default function initWordlesController(db) {
 
         const { creator } = request.body;
 
+        // define the new wordle to be created in Wordle DB
         const newWordle = {
           name: request.body.wordleName,
           description: request.body.wordleDesc,
@@ -91,8 +99,6 @@ export default function initWordlesController(db) {
     }
   };
 
-  // return all functions we define in an object
-  // refer to the routes file above to see this used
   return {
     checkWordsAndCreate,
   };
