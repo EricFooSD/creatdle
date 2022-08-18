@@ -2,6 +2,7 @@
 /* eslint-disable max-len */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-underscore-dangle */
+import axios from 'axios';
 import './styles.scss';
 
 /*
