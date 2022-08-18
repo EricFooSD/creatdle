@@ -3,7 +3,6 @@ import url from 'url';
 import allConfig from '../config/config.js';
 
 import gameModel from './game.mjs';
-import userModel from './user.mjs';
 import wordleModel from './wordle.mjs';
 import allWordModel from './allword.mjs';
 
@@ -34,7 +33,6 @@ else {
 }
 
 db.Game = gameModel(sequelize, Sequelize.DataTypes);
-db.User = userModel(sequelize, Sequelize.DataTypes);
 db.Wordle = wordleModel(sequelize, Sequelize.DataTypes);
 db.AllWord = allWordModel(sequelize, Sequelize.DataTypes);
 
