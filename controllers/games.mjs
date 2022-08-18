@@ -95,6 +95,10 @@ export default function initGamesController(db) {
     }
   };
 
+  // .....................................
+  // Gameplay Function
+  // .....................................
+
   /**
  * @desc to be run when user enters their guess
  * @param request user's 5 letter guess
