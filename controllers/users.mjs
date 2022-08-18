@@ -1,3 +1,4 @@
+/* eslint-disable new-cap */
 import jsSHA from 'jssha';
 
 /*
@@ -6,10 +7,18 @@ import jsSHA from 'jssha';
  * ========================================================
  */
 
+/**
+ * @desc to get random number
+ */
 const getRandomNum = () => (Math.random() * 1000);
 
 const SALT = 'Login Key';
 
+/**
+ * @desc to get hashed string
+ * @param {string} input random number
+ * @return hashed string
+ */
 const getHash = (input) => {
   // create new SHA object
   const shaObj = new jsSHA('SHA-512', 'TEXT', { encoding: 'UTF8' });
@@ -30,7 +39,9 @@ const getHash = (input) => {
  */
 
 export default function initUsersController(db) {
-  // check
+  /**
+ * @desc create a guest ID for frontend to store in cookies
+ */
   const createGuestID = async (request, response) => {
     const guestID = getHash(getRandomNum());
     try {
