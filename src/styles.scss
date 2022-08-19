@@ -101,6 +101,10 @@ header {
   min-width: 300px;
 }
 
+#alert-container {
+  height: 70%;
+}
+
 @media (min-width: 800px) {
   #game-board-name {
     font-size: 35px;

@@ -107,15 +107,14 @@ const createAlert = (text, alertType, timeout) => {
   const container = getElement('alert-container');
   const newAlert = document.createElement('div');
   newAlert.setAttribute('id', 'alert');
-  newAlert.classList.add('alert');
-  newAlert.classList.add(`${alertType}`);
+  newAlert.classList.add('alert', `${alertType}`);
   newAlert.setAttribute('role', 'alert');
   newAlert.innerHTML = `${text}`;
   container.appendChild(newAlert);
 
-  setTimeout(() => {
-    newAlert.remove();
-  }, timeout);
+  // setTimeout(() => {
+  //   newAlert.remove();
+  // }, timeout);
 };
 // creating the div for buttons
 const createDivForButton = (parent) => {
