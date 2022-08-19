@@ -493,7 +493,7 @@ const submitWordle = () => {
   }
   // get word name and description from input
   const wordleName = getElement('wordle-name').value;
-  const wordleDesc = getElement('wordle-Desc').value;
+  const wordleDesc = getElement('wordle-desc').value;
   const creator = getCookie('user');
   if (createArray.length !== 0) {
     axios
@@ -535,7 +535,7 @@ const loadCreatePage = () => {
   createInputForWordle('wordle-name', 'Wordle Name', row);
 
   // description of Wordle
-  createInputForWordle('wordle-Desc', 'Wordle Description', row);
+  createInputForWordle('wordle-desc', 'Wordle Description', row);
 
   // create inputs
   createInputForWord(0, row);

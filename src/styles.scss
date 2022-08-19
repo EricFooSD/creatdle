@@ -93,6 +93,14 @@ header {
   animation: fading 3s infinite alternate;
 }
 
+#wordle-name {
+  min-width: 300px;
+}
+
+#wordle-desc {
+  min-width: 300px;
+}
+
 @media (min-width: 800px) {
   #game-board-name {
     font-size: 35px;
