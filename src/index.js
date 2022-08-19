@@ -11,10 +11,19 @@ import './styles.scss';
  * ========================================================
  */
 
-// get the current guess letters from session
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// Session helper functions
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+/**
+ * @desc get current guess letters from local session storage
+ */
 const getGuessFromSession = () => JSON.parse(localStorage.getItem('currentGuess'));
 
-// update the current guess letters to session
+/**
+ * @desc to set current guess letters to local session storage
+ * @param {array} array the set of letters clicked on virtual keyboard
+ */
 const updateGuessToSession = (array) => {
   localStorage.setItem('currentGuess', JSON.stringify(array));
 };
@@ -22,13 +31,18 @@ const updateGuessToSession = (array) => {
 const rejectSound = new Audio('/sounds/reject.wav');
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-// Helper functions for Cookies
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// Cookie helper functions
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 const setCookie = (cname, cvalue) => {
   document.cookie = `${cname}=${cvalue};`;
 };
 
+/**
+ * @desc function to get cookie value from local cookie storage
+ * @param {string} cname name of the cookie required from browser
+ * @return value of the cookie
+ */
 const getCookie = (cname) => {
   const name = `${cname}=`;
   const decodedCookie = decodeURIComponent(document.cookie);
@@ -45,7 +59,9 @@ const getCookie = (cname) => {
   return '';
 };
 
-// checking if user cookie is already present and set if not
+/**
+ * @desc function to check current user  ID, if no user ID, set a guest user ID in cookie
+ */
 const checkUserCookie = () => {
   const user = getCookie('user');
   if (!user || user === '') {
@@ -65,9 +81,9 @@ const checkUserCookie = () => {
  * ========================================================
  */
 
-const getElement = (id) => document.getElementById(id);
+const getElementFromID = (id) => document.getElementById(id);
 
-// create rows in the Wordle board
+// create row of 5 letter tiles in the Wordle board
 const createRowInBoard = (number, parent) => {
   const newRow = document.createElement('div');
   newRow.classList.add('row');
@@ -85,16 +101,16 @@ const createRowInBoard = (number, parent) => {
   }
 };
 
-// update letters in the row as user selects the alphabets
+// update letters in the row as user selects the alphabets on virtual keyboard
 const updateRow = (array) => {
   const guessNumber = localStorage.getItem('guessNumber');
   for (let i = 0; i < 5; i += 1) {
-    if (!array[i]) getElement(`R${guessNumber}L${i}`).innerHTML = '';
-    else getElement(`R${guessNumber}L${i}`).innerHTML = `${array[i].toUpperCase()}`;
+    if (!array[i]) getElementFromID(`R${guessNumber}L${i}`).innerHTML = '';
+    else getElementFromID(`R${guessNumber}L${i}`).innerHTML = `${array[i].toUpperCase()}`;
   }
 };
 
-// creating the div for alerts
+// creating div for alerts
 const createDivForAlert = (parent) => {
   const alert = document.createElement('div');
   alert.setAttribute('id', 'alert-container');
@@ -104,7 +120,7 @@ const createDivForAlert = (parent) => {
 
 // creating alerts for validations
 const createAlert = (text, alertType, timeout) => {
-  const container = getElement('alert-container');
+  const container = getElementFromID('alert-container');
   const newAlert = document.createElement('div');
   newAlert.setAttribute('id', 'alert');
   newAlert.classList.add('alert', `${alertType}`);
@@ -112,9 +128,9 @@ const createAlert = (text, alertType, timeout) => {
   newAlert.innerHTML = `${text}`;
   container.appendChild(newAlert);
 
-  // setTimeout(() => {
-  //   newAlert.remove();
-  // }, timeout);
+  setTimeout(() => {
+    newAlert.remove();
+  }, timeout);
 };
 // creating the div for buttons
 const createDivForButton = (parent) => {
@@ -136,7 +152,7 @@ const createBtn = (name, innerText, parent, callBack) => {
   button.addEventListener('click', callBack);
 };
 
-// create the letters matrix for Wordle
+// create the full game board for Wordle
 const createWordBoard = () => {
   // div for main game board
   const gameBoard = document.createElement('div');
@@ -163,6 +179,7 @@ const createWordBoard = () => {
   const row = document.createElement('div');
   row.classList.add('row', 'justify-content-center');
   gameBoard.appendChild(row);
+
   // alert div
   createDivForAlert(row);
 
@@ -204,9 +221,11 @@ const createInputForWordle = (id, placeholder, parent) => {
  */
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-// Starting and Playing the Game
+// Virtual Keyboard + Functions
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 // after users have correctly guessed the word, allow them to move to next word in game
+// function will run when user clicks on go to next word button
 const goToNextWord = () => {
   const gameId = localStorage.getItem('gameId');
 
@@ -214,15 +233,23 @@ const goToNextWord = () => {
     .post('/goToNextWord', { gameId })
     .then((response) => {
       const current = response.data;
+
+      // reset game state in local storage
       updateGuessToSession([]);
       localStorage.setItem('guessNumber', 0);
-      getElement('game-board-container').remove();
+
+      // remove old game board DOM
+      getElementFromID('game-board-container').remove();
+
+      // create new game board DOM and populate
       createWordBoard();
-      getElement('game-board-name').innerHTML = `${current.name}: ${current.desc}`;
+      getElementFromID('game-board-name').innerHTML = `${current.name}: ${current.desc}`;
     })
     .catch((error) => { console.log(error); });
 };
 
+// if user is unable get the answer after 6 guesses, allow them to try again
+// function to reset game states and reset DOM
 const resetGame = () => {
   const gameId = localStorage.getItem('gameId');
 
@@ -230,11 +257,17 @@ const resetGame = () => {
     .post('/resetGame', { gameId })
     .then((response) => {
       const current = response.data;
+
+      // reset game state in local storage
       updateGuessToSession([]);
       localStorage.setItem('guessNumber', 0);
-      getElement('game-board-container').remove();
+
+      // remove exiting game board DOM
+      getElementFromID('game-board-container').remove();
+
+      // create new game board and populate
       createWordBoard();
-      getElement('game-board-name').innerHTML = `${current.name}: ${current.desc}`;
+      getElementFromID('game-board-name').innerHTML = `${current.name}: ${current.desc}`;
     })
     .catch((error) => { console.log(error); });
 };
@@ -244,7 +277,9 @@ const clickBackspace = () => {
   const backspaceArray = getGuessFromSession();
   if (backspaceArray.length > 0) {
     backspaceArray.pop();
+    // update local storage of current game state
     updateGuessToSession(backspaceArray);
+    // update letter tiles
     updateRow(backspaceArray);
   }
 };
@@ -254,7 +289,7 @@ const checkGuess = () => {
   let guess = '';
   const submitArray = getGuessFromSession();
   const gameId = localStorage.getItem('gameId');
-  // check if there are 5 letters before submitting, throw error
+  // check if there are 5 letters before submitting, if not 5 letters throw error
   if (submitArray.length < 5) {
     rejectSound.play();
     createAlert('Not enough letters', 'alert-warning', 2000);
@@ -266,24 +301,22 @@ const checkGuess = () => {
       .post('/checkGuess', { guess, gameId })
       .then((response) => {
         const check = response.data;
-        // if submission is a word
+        // if guess is a legitimate word
         if (check.isWord) {
           for (let i = 0; i < 5; i += 1) {
-            const letter = getElement(`R${check.guessNum}L${i}`);
+            const letter = getElementFromID(`R${check.guessNum}L${i}`);
             letter.classList.add(`${check.color[i]}`);
             letter.innerHTML = `${(check.split[i]).toUpperCase()}`;
           }
           localStorage.setItem('guessNumber', `${check.guessNum + 1}`);
           updateGuessToSession([]);
           if (check.won) {
-            // if user has correctly guessed the word, throw button to move to next word
-            const btnCtn = getElement('button-container');
-            // button
+            // if user has correctly guessed the word, show button to move to next word
+            const btnCtn = getElementFromID('button-container');
             createBtn('next', 'Next Word', btnCtn, goToNextWord);
           } else if (localStorage.getItem('guessNumber') >= 6) {
             // if user's guess is wrong and it is the 6th guess, show try again button
-            const btnCtn = getElement('button-container');
-            // button
+            const btnCtn = getElementFromID('button-container');
             createBtn('tryAgain', 'Try Again', btnCtn, resetGame);
           }
         } else {
@@ -388,111 +421,23 @@ const Keyboard = {
   },
 
 };
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// Creating Wordle Page + Functions
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-// client load the game ie the matrix
-const loadStartGamePage = () => {
-  getElement('code-container').remove();
-  const gameId = localStorage.getItem('gameId');
-  createWordBoard();
-  axios
-    .post('/checkCurrentGame', { gameId })
-    .then((response) => {
-      const current = response.data;
-      getElement('game-board-name').innerHTML = `${current.name}: ${current.desc}`;
-      // update the current state of the game, ie how many guesses, what where the guesses and color
-      for (let i = 0; i < current.guessSplit.length; i += 1) {
-        for (let j = 0; j < 5; j += 1) {
-          const letter = getElement(`R${i}L${j}`);
-          letter.classList.add(`${current.color[i][j]}`);
-          letter.innerHTML = `${(current.guessSplit[i][j]).toUpperCase()}`;
-        }
-      }
-      localStorage.setItem('guessNumber', `${current.color.length}`);
-      localStorage.setItem('currentGuess', JSON.stringify([]));
-    })
-    .catch((error) => { console.log(error); });
-
-  Keyboard.init();
-};
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-// Checking Unique Code
-
-// check the unique entered is valid
-const checkCode = () => {
-  const enteredCode = getElement('code-input').value;
-  const user = getCookie('user');
-  // if code entered is not 6 digit throw error
-  if (enteredCode.length !== 6) {
-    createAlert('Please enter a 6 digit code', 'alert-danger', 3000);
-  } else {
-    axios
-      .post('/checkCodeAndCreate', { enteredCode, user })
-      .then((response) => {
-        const check = response.data;
-        // check the word entered is an actually word, if not validation alert
-        if (!check.availCode) {
-          createAlert('Not a valid code, create a new wordle instead', 'alert-warning', 3000);
-        } else {
-          localStorage.setItem('gameId', `${check.gameId}`);
-          loadStartGamePage();
-        }
-      })
-      .catch((error) => { console.log(error); });
-  }
-};
-
-// load page for user to input unique code
-const loadCodePage = () => {
-  getElement('home-container').remove();
-  // div for entering unique code
-  const codePage = document.createElement('div');
-  codePage.setAttribute('id', 'code-container');
-  codePage.classList.add('container', 'd-flex', 'align-items-center', 'justify-content-center');
-  document.body.appendChild(codePage);
-
-  // bootstrap row
-  const row = document.createElement('div');
-  row.classList.add('row', 'justify-content-center');
-  codePage.appendChild(row);
-
-  // bootstrap col to house input
-  const newCol = document.createElement('div');
-  newCol.classList.add('col-md-12', 'd-flex', 'justify-content-center', 'col-12', 'word-input');
-  row.appendChild(newCol);
-  // input
-  const inputField = document.createElement('input');
-  inputField.setAttribute('id', 'code-input');
-  inputField.setAttribute('type', 'text');
-  inputField.setAttribute('placeholder', 'Unique Code');
-  newCol.appendChild(inputField);
-
-  // button div
-  createDivForButton(row);
-
-  // button
-  createBtn('code', 'Submit', getElement('button-container'), checkCode);
-
-  // alert div
-  createDivForAlert(row);
-};
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-// Create Wordle
-
-// process user request to create a wordle, after validation checks
+// process user request to create a wordle, with validation checks
 const submitWordle = () => {
   const createArray = [];
   // get the words from the 5 rows
   for (let i = 0; i < 5; i += 1) {
-    const word = getElement(`word-input-${i}`).value.toLowerCase();
+    const word = getElementFromID(`word-input-${i}`).value.toLowerCase();
     if (word) {
       createArray.push(word);
     }
   }
   // get word name and description from input
-  const wordleName = getElement('wordle-name').value;
-  const wordleDesc = getElement('wordle-desc').value;
+  const wordleName = getElementFromID('wordle-name').value;
+  const wordleDesc = getElementFromID('wordle-desc').value;
   const creator = getCookie('user');
   if (createArray.length !== 0) {
     axios
@@ -519,7 +464,7 @@ const submitWordle = () => {
 
 // loading the create wordle page
 const loadCreatePage = () => {
-  getElement('home-container').remove();
+  getElementFromID('home-container').remove();
   // div for creating wordle
   const createPage = document.createElement('div');
   createPage.setAttribute('id', 'create-container');
@@ -558,8 +503,99 @@ const loadCreatePage = () => {
   document.body.appendChild(createPage);
 };
 
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// Playing Wordle Page + Functions
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+// function to load the Wordle game page
+const loadStartGamePage = () => {
+  getElementFromID('code-container').remove();
+  const gameId = localStorage.getItem('gameId');
+  createWordBoard();
+  axios
+    .post('/checkCurrentGame', { gameId })
+    .then((response) => {
+      const current = response.data;
+      getElementFromID('game-board-name').innerHTML = `${current.name}: ${current.desc}`;
+      // update the current state of the game, ie how many guesses, what where the guesses and color
+      for (let i = 0; i < current.guessSplit.length; i += 1) {
+        for (let j = 0; j < 5; j += 1) {
+          const letter = getElementFromID(`R${i}L${j}`);
+          letter.classList.add(`${current.color[i][j]}`);
+          letter.innerHTML = `${(current.guessSplit[i][j]).toUpperCase()}`;
+        }
+      }
+      localStorage.setItem('guessNumber', `${current.color.length}`);
+      localStorage.setItem('currentGuess', JSON.stringify([]));
+    })
+    .catch((error) => { console.log(error); });
+
+  // load virtual keyboard
+  Keyboard.init();
+};
+
+// check if the unique code entered is valid, if value create game for user
+const checkCode = () => {
+  const enteredCode = getElementFromID('code-input').value;
+  const user = getCookie('user');
+  // if code entered is not 6 digit throw error
+  if (enteredCode.length !== 6) {
+    createAlert('Please enter a 6 digit code', 'alert-danger', 3000);
+  } else {
+    axios
+      .post('/checkCodeAndCreate', { enteredCode, user })
+      .then((response) => {
+        const check = response.data;
+        // check if code is a valid code, if it is, create game for user
+        if (!check.availCode) {
+          createAlert('Not a valid code, create a new wordle instead', 'alert-warning', 3000);
+        } else {
+          localStorage.setItem('gameId', `${check.gameId}`);
+          loadStartGamePage();
+        }
+      })
+      .catch((error) => { console.log(error); });
+  }
+};
+
+// load page for user to input unique code
+const loadCodePage = () => {
+  getElementFromID('home-container').remove();
+  // div for entering unique code
+  const codePage = document.createElement('div');
+  codePage.setAttribute('id', 'code-container');
+  codePage.classList.add('container', 'd-flex', 'align-items-center', 'justify-content-center');
+  document.body.appendChild(codePage);
+
+  // bootstrap row
+  const row = document.createElement('div');
+  row.classList.add('row', 'justify-content-center');
+  codePage.appendChild(row);
+
+  // bootstrap col to house input
+  const newCol = document.createElement('div');
+  newCol.classList.add('col-md-12', 'd-flex', 'justify-content-center', 'col-12', 'word-input');
+  row.appendChild(newCol);
+  // input
+  const inputField = document.createElement('input');
+  inputField.setAttribute('id', 'code-input');
+  inputField.setAttribute('type', 'text');
+  inputField.setAttribute('placeholder', 'Unique Code');
+  newCol.appendChild(inputField);
+
+  // button div
+  createDivForButton(row);
+
+  // button
+  createBtn('code', 'Submit', getElementFromID('button-container'), checkCode);
+
+  // alert div
+  createDivForAlert(row);
+};
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // Homepage
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 // loading homepage
 const loadHomePage = () => {
@@ -573,6 +609,12 @@ const loadHomePage = () => {
   createBtn('play', 'Play Wordle', homePage, loadCodePage);
   createBtn('create', 'Create Wordle', homePage, loadCreatePage);
 };
+
+/*
+ * ========================================================
+ *                 INITIALISE GAME
+ * ========================================================
+ */
 
 // by default, load homepage
 loadHomePage();
