@@ -14,7 +14,7 @@ To try the app, you may create your own Wordle or try with below test Wordles
 
 | Unique Code | Description           |
 | ----------- | --------------------- |
-| ABC123      | Seeded Test           |
+| ABC123      | Welcome to Creatdle   |
 | UO7NQO      | Words related to Dogs |
 
 <sub>case sensitive</sub>
