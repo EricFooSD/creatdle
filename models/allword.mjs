@@ -6,9 +6,9 @@ export default function allWordModel(sequelize, DataTypes) {
       primaryKey: true,
       type: DataTypes.INTEGER,
     },
-    word: {
+    all: {
       allowNull: false,
-      type: DataTypes.STRING,
+      type: DataTypes.JSON,
     },
     createdAt: {
       allowNull: false,

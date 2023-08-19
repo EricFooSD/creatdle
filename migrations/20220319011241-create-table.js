@@ -73,9 +73,9 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      word: {
+      all: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.JSON,
       },
       created_at: {
         allowNull: false,

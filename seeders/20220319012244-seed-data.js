@@ -3,18 +3,38 @@ module.exports = {
     const wordle = [
       {
         name: 'Welcome to Creatdle',
-        description: 'This is a testing Wordle',
+        description: 'Words about weather',
         words: JSON.stringify({
-          words: ['sweet', 'great', 'hello'],
+          words: ['rainy', 'misty', 'windy'],
+          tally: [{
+            r: 1, a: 1, i: 1, n: 1, y: 1,
+          }, {
+            m: 1, i: 1, s: 1, t: 1, y: 1,
+          }, {
+            w: 1, i: 1, n: 1, d: 1, y: 1,
+          }],
+        }),
+        code: 'ABC123',
+        creator_id: '6ab2859e0525281b22803b2c8ee9ac8723cc6c5af4156',
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        name: 'All about dogs',
+        description: 'Words related to Dogs',
+        words: JSON.stringify({
+          words: ['sweet', 'great', 'brave', 'furry'],
           tally: [{
             s: 1, w: 1, e: 2, t: 1,
           }, {
             g: 1, r: 1, e: 1, a: 1, t: 1,
           }, {
-            h: 1, l: 2, e: 1, o: 1,
+            b: 1, r: 1, a: 1, v: 1, e: 1,
+          }, {
+            f: 1, u: 1, r: 2, y: 1,
           }],
         }),
-        code: 'ABC123',
+        code: 'UO7NQO',
         creator_id: '6ab2859e0525281b22803b2c8ee9ac8723cc6c5af4156',
         created_at: new Date(),
         updated_at: new Date(),
@@ -15971,15 +15991,11 @@ module.exports = {
       'zudda',
       'zulus',
       'zunis'];
-    const allWords = [];
-    fiveLetterWords.forEach((element) => {
-      const obj = {
-        word: element,
-        created_at: new Date(),
-        updated_at: new Date(),
-      };
-      allWords.push(obj);
-    });
+    const allWords = [{
+      all: JSON.stringify(fiveLetterWords),
+      created_at: new Date(),
+      updated_at: new Date(),
+    }];
     await queryInterface.bulkInsert('allwords', allWords);
   },
 
