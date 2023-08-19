@@ -40,15 +40,16 @@ export default function initWordlesController(db) {
         accept: true,
       };
 
+      const words = await db.AllWord.findOne({ where: { id: 1 } });
+
       // loop to compare if each word is a legitimate word
       // compare from master words list in AllWords DB
       for (let i = 0; i < createArray.length; i += 1) {
-        const isWord = await db.AllWord.findOne({ where: { word: `${createArray[i]}` } });
-        if (!isWord) {
+        if (words.all.includes(createArray[i])) {
+          acceptedArray.push(createArray[i]);
+        } else {
           responseObj.accept = false;
           rejectedArray.push(createArray[i]);
-        } else {
-          acceptedArray.push(createArray[i]);
         }
       }
       responseObj.rejected = rejectedArray;

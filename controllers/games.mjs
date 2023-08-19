@@ -107,7 +107,8 @@ export default function initGamesController(db) {
     try {
       // check if guess is a real word from allWords DB
       const { guess } = request.body;
-      const isWord = await db.AllWord.findOne({ where: { word: `${guess}` } });
+
+      const words = await db.AllWord.findOne({ where: { id: 1 } });
 
       // define base response object
       let responseObj = {
@@ -119,7 +120,7 @@ export default function initGamesController(db) {
       };
 
       // if users guess is not a real word, change response object
-      if (!isWord) {
+      if (!words.all.includes(guess)) {
         responseObj.isWord = false;
       }
       // else, users guess is valid, check the guess against answer
