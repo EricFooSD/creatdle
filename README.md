@@ -6,7 +6,7 @@ Creatdle is built responsive and works well on mobile. There is an inbuilt virtu
 
 Stack: Bootstrap, Express, Sequelize, PostgreSQL, Webpack
 
-Deployed:
+Deployed: https://creatdle-ad1e940cb5a1.herokuapp.com/
 
 Video Demo Link: https://www.youtube.com/watch?v=C6iuof7cLic
 
